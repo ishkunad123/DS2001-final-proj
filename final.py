@@ -18,7 +18,7 @@ def sort_df(column, type_data, df):
 def extract_column(column, df):
     col_list = df[column].tolist()
     return col_list
-#test
+
 def get_csv_for_vis(df): 
     df1 = df
     del df["dispatch_ts"]
