@@ -4,7 +4,7 @@
 Alina Gonzalez & Ishani Kunadharaju
 DS2001 Final Project 
 
-Analytics of Crashes in Boston 
+Analysis of Crashes in Boston
 """
 import matplotlib.pyplot as plt
 import pandas as pd
