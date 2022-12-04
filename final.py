@@ -97,9 +97,54 @@ def year_graph(df):
     plt.xticks(rotation = 30, horizontalalignment = "center")
     plt.xlabel("Year")
     plt.ylabel("Accidents")
-
-    plt.savefig("year_graph.pdf", bbox_inches = "tight")
     
+    plt.show()
+    plt.savefig("year_graph.pdf", bbox_inches = "tight")
+
+def year_breakdown(df): 
+    #year_graph(df)
+    years = []
+    for index, row in df.iterrows(): 
+        year_row = row["dispatch_ts"]
+        pieces = year_row.strip().split("-")
+        year = pieces[0]
+        if year != None: 
+            if year not in years: 
+                years.append(year)
+    mv = []
+    bike = []
+    ped = []
+    for x in years:
+        mv_count = 0
+        bike_count = 0
+        ped_count = 0
+        for index, row in df.iterrows(): 
+            year_row = row["dispatch_ts"]
+            pieces = year_row.strip().split("-")
+            year = pieces[0]
+            if year == x: 
+                type_row = row["mode_type"]
+                if type_row == "mv": 
+                    mv_count += 1
+                elif type_row == "bike": 
+                    bike_count += 1
+                else: 
+                    ped_count += 1
+        mv.append(mv_count)
+        bike.append(bike_count)
+        ped.append(ped_count)
+    
+    print(mv, bike, ped)
+    fig, ax = plt.subplots()
+    ax.bar(years, mv, color = "#78BDF3", label = "Motor Vehicle")
+    ax.bar(years, bike, color = "blue", label = "Bike")
+    ax.bar(years, ped, color = "purple", bottom = bike, label ="Pedestrian")
+    
+    ax.set_ylabel("Frequency of Accident")
+    ax.legend()   
+    plt.show()
+    plt.savefig("year_distr_graph.pdf", bbox_inches = "tight")
+
 
 
 def most_dangerous_street(df):
@@ -136,6 +181,7 @@ def main():
     year_graph(vis_crash)
     plt.show()
     
+    year_breakdown(vis_crash)
     
     most_dangerous_street(vis_crash)
     get_csv_for_vis(vis_crash)
