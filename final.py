@@ -98,8 +98,9 @@ def year_graph(df):
     plt.xlabel("Year")
     plt.ylabel("Accidents")
 
-    plt.show()
     plt.savefig("year_graph.pdf", bbox_inches = "tight")
+    
+
 
 def most_dangerous_street(df):
     street_freqs = {}
@@ -130,13 +131,12 @@ def most_dangerous_street(df):
 
 def main(): 
     vis_crash = read_data(VIS_ZERO_CRASH)
-    # example for sort_df()
-    mv_df = sort_df("mode_type", "mv", vis_crash)
-    extract_column("street", mv_df)
-    transportation_graph(vis_crash)
-    
-    year_graph(vis_crash)
 
+    transportation_graph(vis_crash)
+    year_graph(vis_crash)
+    plt.show()
+    
+    
     most_dangerous_street(vis_crash)
     get_csv_for_vis(vis_crash)
 main()
