@@ -45,17 +45,17 @@ def transportation_graph(df):
     
     transportation_methods = ["Motor Vehicle", "Bike", "Pedestrian"]
     counts = [mv_count, bike_count, ped_count]
-    colors = ["purple", "pink", "violet"]
-    plt.bar(transportation_methods, counts, color = colors, alpha = 0.8)
+    colors = ["#78BDF3", "blue", "purple"]
     
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xticks(rotation = 30, horizontalalignment = "center")
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xlabel("Transportation Method")
-    plt.ylabel("Accidents")
-        
+    print(mv_count)
+    
+    plt.pie(counts, labels = transportation_methods, colors = colors, autopct = '%.1f')
+    fig = plt.figure(figsize =(10, 7))
+    
     plt.show
-    plt.savefig("transportation_graph.pdf", bbox_inches = "tight")
+    plt.savefig("transportation_pie.pdf", bbox_inches = "tight")
+    
+
 
 def year_graph(df):
     year = extract_column("dispatch_ts", df)
@@ -102,6 +102,49 @@ def year_graph(df):
     plt.show
     plt.savefig("year_graph.pdf", bbox_inches = "tight")
 
+def year_breakdown(df): 
+    #year_graph(df)
+    years = []
+    for index, row in df.iterrows(): 
+        year_row = row["dispatch_ts"]
+        pieces = year_row.strip().split("-")
+        year = pieces[0]
+        if year != None: 
+            if year not in years: 
+                years.append(year)
+    mv = []
+    bike = []
+    ped = []
+    for x in years:
+        mv_count = 0
+        bike_count = 0
+        ped_count = 0
+        for index, row in df.iterrows(): 
+            year_row = row["dispatch_ts"]
+            pieces = year_row.strip().split("-")
+            year = pieces[0]
+            if year == x: 
+                type_row = row["mode_type"]
+                if type_row == "mv": 
+                    mv_count += 1
+                elif type_row == "bike": 
+                    bike_count += 1
+                else: 
+                    ped_count += 1
+        mv.append(mv_count)
+        bike.append(bike_count)
+        ped.append(ped_count)
+    
+    print(mv, bike, ped)
+    fig, ax = plt.subplots()
+    ax.bar(years, mv, color = "#78BDF3", label = "Motor Vehicle")
+    ax.bar(years, bike, color = "blue", label = "Bike")
+    ax.bar(years, ped, color = "purple", bottom = bike, label ="Pedestrian")
+    
+    ax.set_ylabel("Frequency of Accident")
+    ax.legend()   
+    plt.show()
+    plt.savefig("year_distr_graph.pdf", bbox_inches = "tight")
 
 def main(): 
     vis_crash = read_data(VIS_ZERO_CRASH)
@@ -111,6 +154,7 @@ def main():
     transportation_graph(vis_crash)
     plt.show()
     year_graph(vis_crash)
+    year_breakdown(vis_crash)
     
     
     get_csv_for_vis(vis_crash)
