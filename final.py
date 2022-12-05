@@ -44,17 +44,15 @@ def transportation_graph(df):
     
     transportation_methods = ["Motor Vehicle", "Bike", "Pedestrian"]
     counts = [mv_count, bike_count, ped_count]
-    colors = ["purple", "pink", "violet"]
-    plt.bar(transportation_methods, counts, color = colors, alpha = 0.8)
+    colors = ["#78BDF3", "blue", "purple"]
     
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xticks(rotation = 30, horizontalalignment = "center")
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xlabel("Transportation Method")
-    plt.ylabel("Accidents")
-        
-    plt.show()
-    plt.savefig("transportation_graph.pdf", bbox_inches = "tight")
+    print(mv_count)
+    
+    plt.pie(counts, labels = transportation_methods, colors = colors, autopct = '%.1f')
+    fig = plt.figure(figsize =(10, 7))
+    
+    plt.show
+    plt.savefig("transportation_pie.pdf", bbox_inches = "tight")
 
 def year_graph(df):
     year = extract_column("dispatch_ts", df)
