@@ -207,9 +207,9 @@ def most_dangerous_street(df):
     # lists for graphing
     mode_names = ["Motor Vehicle", "Bike", "Pedestrian"]
     mode_counts = [mv, bike, ped]
-    mode_colors = ["violet", "blue", "green"]
+    mode_colors = ["#78BDF3", "blue", "purple"]
     # graph distribution 
-    plt.bar(mode_names, mode_counts, color = mode_colors, alpha = 0.6)
+    plt.bar(mode_names, mode_counts, color = mode_colors)
     plt.xticks(rotation = 30, horizontalalignment = "center")
     plt.title("Accidents by Mode type on " + max_street)
     plt.xlabel("Mode of Transportation")
