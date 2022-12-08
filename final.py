@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Alina Gonzalez & Ishani Kunadharaju
-DS2001 Final Project 
+Created on Mon Nov 28 17:59:14 2022
 
-Analysis of Crashes in Boston
+@author: ishanikunadharaju
 """
+
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 VIS_ZERO_CRASH = "vis_zero_crash_rec.csv"
 
@@ -17,8 +18,8 @@ def read_data(file):
     del df['y_cord']
     return df 
     
-def sort_df(column, type_name, df):
-    new_df = df[df[column] == type_name]
+def sort_df(column, type, df):
+    new_df = df[df[column] == type]
     # new_df.index.tolist()
     return new_df
 
@@ -44,17 +45,16 @@ def transportation_graph(df):
     
     transportation_methods = ["Motor Vehicle", "Bike", "Pedestrian"]
     counts = [mv_count, bike_count, ped_count]
-    colors = ["purple", "pink", "violet"]
-    plt.bar(transportation_methods, counts, color = colors, alpha = 0.8)
+    colors = ["#78BDF3", "blue", "purple"]
     
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xticks(rotation = 30, horizontalalignment = "center")
-    plt.title("Frequency of Accidents for Transportation Methods")
-    plt.xlabel("Transportation Method")
-    plt.ylabel("Accidents")
-        
-    plt.show()
-    plt.savefig("transportation_graph.pdf", bbox_inches = "tight")
+    
+    plt.pie(counts, labels = list(zip(transportation_methods, counts)), colors = colors, autopct = '%.1f')
+    fig = plt.figure(figsize =(10, 7))
+    
+    plt.show
+    plt.savefig("transportation_pie.pdf", bbox_inches = "tight")
+    
+
 
 def year_graph(df):
     year = extract_column("dispatch_ts", df)
@@ -97,8 +97,8 @@ def year_graph(df):
     plt.xticks(rotation = 30, horizontalalignment = "center")
     plt.xlabel("Year")
     plt.ylabel("Accidents")
-    
-    plt.show()
+
+    plt.show
     plt.savefig("year_graph.pdf", bbox_inches = "tight")
 
 def year_breakdown(df): 
@@ -145,44 +145,16 @@ def year_breakdown(df):
     plt.show()
     plt.savefig("year_distr_graph.pdf", bbox_inches = "tight")
 
-
-
-def most_dangerous_street(df):
-    street_freqs = {}
-    for index, row in df.iterrows(): 
-        name = row["street"]
-        if name != None: 
-            if name not in street_freqs: 
-                name_df = sort_df("street", name, df)
-                street_freqs[name] = len(name_df)
-    max_street = max(street_freqs, key=street_freqs.get)
-
-    max_st_df = sort_df("street", max_street, df)
-    ped = len(sort_df("mode_type", "ped", max_st_df))
-    mv = len(sort_df("mode_type", "mv", max_st_df))
-    bike = len(sort_df("mode_type", "bike", max_st_df))
-    
-    mode_names = ["Motor Vehicle", "Bike", "Pedestrian"]
-    mode_counts = [mv, bike, ped]
-    mode_colors = ["violet", "blue", "green"]
-    
-    plt.bar(mode_names, mode_counts, color = mode_colors, alpha = 0.6)
-    plt.xticks(rotation = 30, horizontalalignment = "center")
-    plt.title("Accidents by Mode type on " + max_street)
-    plt.xlabel("Mode of Transportation")
-    plt.ylabel("Accidents")
-    plt.show()
-    return max_street        
-
 def main(): 
     vis_crash = read_data(VIS_ZERO_CRASH)
-
+    # example for sort_df()
+    mv_df = sort_df("mode_type", "mv", vis_crash)
+    extract_column("street", mv_df)
     transportation_graph(vis_crash)
-    year_graph(vis_crash)
     plt.show()
-    
+    year_graph(vis_crash)
     year_breakdown(vis_crash)
     
-    most_dangerous_street(vis_crash)
+    
     get_csv_for_vis(vis_crash)
 main()
