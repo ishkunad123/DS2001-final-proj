@@ -61,25 +61,42 @@ def get_csv_for_vis(df):
     # no return; saves the df1 to a csv file. 
     
 def transportation_graph(df):
+    '''
+    creates a pie chart of the frequencies of motor vehicle, pedestrian, and bike accidents
+        df: cleaned dataframe
+    returns: pie chart of frequencies with values and percentages
+    '''
+    # calls extract_column function to extract mode column
     types = extract_column("mode_type", df)
     
+    # finds the frequency of each type of accident from the column
     mv_count = types.count("mv")
     bike_count = types.count("bike")
     ped_count = types.count("ped")
     
+    # creating labels, values, and color lists for the pie chart
     transportation_methods = ["Motor Vehicle", "Bike", "Pedestrian"]
     counts = [mv_count, bike_count, ped_count]
     colors = ["#78BDF3", "blue", "purple"]
     
-    
+    # plotting the pie chart
     plt.pie(counts, labels = list(zip(transportation_methods, counts)), colors = colors, autopct = '%.1f')
     fig = plt.figure(figsize =(10, 7))
+    # saving figure
     plt.savefig("transportation_pie.pdf", bbox_inches = "tight")
+    # showing pie chart
     plt.show()
 
 def year_graph(df):
+    '''
+    creates bar chart of the frequencies of accidents per year from 2015-2022
+        df: cleaned dataframe 
+    returns: bar chart of frequencies of accidents per year
+    '''
+    # calls extract_column function to extract the year and time of the accident
     year = extract_column("dispatch_ts", df)
     
+    # creates lists for all the years that an accident happened
     fifteen = []
     sixteen = []
     seventeen = []
@@ -89,6 +106,7 @@ def year_graph(df):
     twenty_one = []
     twenty_two = []
     
+    # for loop to filter through time and year and add the values to appropriate lists we've created
     for value in year:
         if value[:4] == "2015":
             fifteen.append(value)
@@ -107,17 +125,23 @@ def year_graph(df):
         elif value[:4] == "2022":
             twenty_two.append(value)
 
+    # creating titles and values for bar chart 
     years = ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"]
     counts = [len(fifteen), len(sixteen), len(seventeen), len(eighteen), len(nineteen), 
                len(twenty), len(twenty_one), len(twenty_two)]
+    # color list
     year_colors = ["purple", "pink", "violet", "green", "blue", "magenta", "olive", "indigo"]
+    # plotting bar chart
     plt.bar(years, counts, color = year_colors, alpha = 0.6)
     
+    # chart, x-axis, and y-axis titles
     plt.title("Frequency of Accidents Per Year")
     plt.xticks(rotation = 30, horizontalalignment = "center")
     plt.xlabel("Year")
     plt.ylabel("Accidents")
+    # saving figure
     plt.savefig("year_graph.pdf", bbox_inches = "tight")
+    # showing bar chart 
     plt.show()
 
 def year_breakdown(df):
@@ -218,6 +242,9 @@ def most_dangerous_street(df):
     plt.show()       
 
 def main(): 
+    '''
+    the main function graphs four charts: three bar charts and one pie chart
+    '''
     vis_crash = read_data(VIS_ZERO_CRASH)
 
     transportation_graph(vis_crash)
@@ -228,4 +255,5 @@ def main():
     
     most_dangerous_street(vis_crash)
     get_csv_for_vis(vis_crash)
+    
 main()
